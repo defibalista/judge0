@@ -12,11 +12,24 @@ LABEL maintainer=$JUDGE0_MAINTAINER
 ENV PATH "/usr/local/ruby-2.7.0/bin:/opt/.gem/bin:$PATH"
 ENV GEM_HOME "/opt/.gem/"
 
+# Install Node.js and npm
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       cron \
       libpq-dev \
-      sudo && \
+      sudo \
+      curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    # Install your required npm packages globally
+    npm install -g \
+      ethers@5.7.2 \
+      web3@1.9.0 \
+      axios@1.6.2 \
+      bignumber.js@9.1.2 \
+      alchemy-sdk@2.11.0 \
+      @moralisweb3/common-evm-utils@2.23.2 && \
+    # Clean up
     rm -rf /var/lib/apt/lists/* && \
     echo "gem: --no-document" > /root/.gemrc && \
     gem install bundler:2.1.4 && \
